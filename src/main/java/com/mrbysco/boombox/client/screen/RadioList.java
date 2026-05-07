@@ -94,7 +94,6 @@ public class RadioList extends ObjectSelectionList<RadioList.RadioEntry> {
 	private void updateEntries(List<RadioEntry> entries) {
 		clearEntries();
 		entries.forEach(this::addEntry);
-		BoomboxMod.LOGGER.info("{}", children());
 	}
 
 	@Override
