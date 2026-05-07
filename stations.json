@@ -59,6 +59,11 @@
             "url": "https://play.sas-media.ru/play_256",
             "title": "Noise FM",
             "name": "Noise FM"
+        },
+        {
+            "url": "https://25343.live.streamtheworld.com/RADIO538.mp3",
+            "title": "Radio 538 NL",
+            "name": "Radio 538 NL"
         }
     ]
 }
