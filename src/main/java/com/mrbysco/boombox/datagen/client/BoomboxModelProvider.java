@@ -5,7 +5,9 @@ import com.mrbysco.boombox.registry.ModRegistry;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
+import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.Identifier;
 
 public class BoomboxModelProvider extends ModelProvider {
 	public BoomboxModelProvider(PackOutput output) {
@@ -14,6 +16,7 @@ public class BoomboxModelProvider extends ModelProvider {
 
 	@Override
 	protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
-		blockModels.createNonTemplateModelBlock(ModRegistry.BOOMBOX.get());
+		Identifier model = ModelLocationUtils.getModelLocation(ModRegistry.BOOMBOX.get());
+		blockModels.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(ModRegistry.BOOMBOX.get(), BlockModelGenerators.plainVariant(model)).with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING));
 	}
 }

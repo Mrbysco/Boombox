@@ -50,7 +50,7 @@ public class StationLoader {
 		if (stationsFile != null) {
 			try {
 				String fileName = stationsFile.indexOf('/') == -1 ? stationsFile : stationsFile.substring(stationsFile.lastIndexOf('/') + 1);
-				BoomboxMod.LOGGER.info("Loading stations from " + fileName);
+				BoomboxMod.LOGGER.info("Loading stations from {}", fileName);
 				try {
 					return BoomboxMod.GSON.fromJson(Files.readString(Path.of(stationsFile)), JsonObject.class);
 				} catch (Exception e) {

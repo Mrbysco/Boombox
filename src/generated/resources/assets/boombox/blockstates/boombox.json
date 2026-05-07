@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=east": {
+      "model": "boombox:block/boombox",
+      "y": 90
+    },
+    "facing=north": {
       "model": "boombox:block/boombox"
+    },
+    "facing=south": {
+      "model": "boombox:block/boombox",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "boombox:block/boombox",
+      "y": 270
     }
   }
 }
