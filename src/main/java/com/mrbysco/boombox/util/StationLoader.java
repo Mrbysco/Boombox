@@ -26,7 +26,7 @@ public class StationLoader {
 	public static void init() {
 		JsonObject object = readLocalStations();
 		if (object == null) {
-			object = WebUtils.getJson("https://adastra.terrarium.earth/stations");
+			object = WebUtils.getJson("https://raw.githubusercontent.com/Mrbysco/Boombox/refs/heads/main/stations.json");
 		}
 
 		if (object == null) return;
@@ -46,7 +46,7 @@ public class StationLoader {
 
 	@Nullable
 	private static JsonObject readLocalStations() {
-		String stationsFile = System.getProperty("adastra.stations");
+		String stationsFile = System.getProperty("boombox.stations");
 		if (stationsFile != null) {
 			try {
 				String fileName = stationsFile.indexOf('/') == -1 ? stationsFile : stationsFile.substring(stationsFile.lastIndexOf('/') + 1);
