@@ -12,6 +12,7 @@ authors="Mrbysco"
 description='''
 Adds a boombox that can play radio stations
 '''
+credits = "Ad Astra for the original Radio block <3"
 [[dependencies.boombox]]
 modId="minecraft"
 type="required"
