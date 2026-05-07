@@ -1,0 +1,26 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+issueTrackerURL="https://github.com/Mrbysco/Boombox/issues"
+license="MIT"
+
+[[mods]]
+modId="boombox"
+version="${file.jarVersion}"
+displayName="Boombox Mod"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/boombox"
+authors="Mrbysco"
+description='''
+Adds a boombox that can play radio stations
+'''
+[[dependencies.boombox]]
+modId="minecraft"
+type="required"
+versionRange="[26.1.2,)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.boombox]]
+modId="neoforge"
+type="required"
+versionRange="[26.1.2.0-alpha,)"
+ordering="NONE"
+side="BOTH"
