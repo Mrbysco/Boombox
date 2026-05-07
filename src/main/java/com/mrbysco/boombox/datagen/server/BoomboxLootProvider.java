@@ -34,7 +34,7 @@ public class BoomboxLootProvider extends LootTableProvider {
 
 		@Override
 		protected Iterable<Block> getKnownBlocks() {
-			return ModRegistry.BLOCKS.getEntries().stream().map(holder -> (Block)holder.value())::iterator;
+			return ModRegistry.BLOCKS.getEntries().stream().map(holder -> (Block) holder.value())::iterator;
 		}
 	}
 }

@@ -9,7 +9,7 @@ public class BoomboxConfig {
 
 	public static class Client {
 		public final ModConfigSpec.IntValue volume;
-		public final ModConfigSpec.ConfigValue<List<? extends String>> favorites ;
+		public final ModConfigSpec.ConfigValue<List<? extends String>> favorites;
 
 		Client(ModConfigSpec.Builder builder) {
 			builder.comment("Client settings")

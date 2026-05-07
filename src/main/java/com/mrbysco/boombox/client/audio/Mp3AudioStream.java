@@ -1,7 +1,13 @@
 package com.mrbysco.boombox.client.audio;
+
 import com.mrbysco.boombox.util.BufferUtils;
 import javazoom.jl.converter.Converter;
-import javazoom.jl.decoder.*;
+import javazoom.jl.decoder.Bitstream;
+import javazoom.jl.decoder.BitstreamException;
+import javazoom.jl.decoder.Decoder;
+import javazoom.jl.decoder.Header;
+import javazoom.jl.decoder.Obuffer;
+import javazoom.jl.decoder.SampleBuffer;
 import net.minecraft.client.sounds.AudioStream;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;

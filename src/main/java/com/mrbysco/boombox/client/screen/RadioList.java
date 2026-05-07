@@ -1,7 +1,6 @@
 package com.mrbysco.boombox.client.screen;
 
 import com.google.common.collect.Sets;
-import com.mrbysco.boombox.BoomboxMod;
 import com.mrbysco.boombox.client.audio.RadioHandler;
 import com.mrbysco.boombox.config.BoomboxConfig;
 import com.mrbysco.boombox.network.server.SetStationPayload;
