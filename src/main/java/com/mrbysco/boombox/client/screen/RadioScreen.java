@@ -156,7 +156,7 @@ public class RadioScreen extends Screen {
 		String genre = "All".equals(genreButton.getValue()) ? null : genreButton.getValue();
 		String search = searchBox.getValue().isEmpty() ? null : searchBox.getValue();
 
-		BoomboxMod.LOGGER.info("Searching stations with filters - Country: {}, Language: {}, Genre: {}, Search: {}",
+		BoomboxMod.LOGGER.debug("Searching stations with filters - Country: {}, Language: {}, Genre: {}, Search: {}",
 				country, language, genre, search);
 
 		List<StationInfo> filtered = service.searchStations(
@@ -172,7 +172,7 @@ public class RadioScreen extends Screen {
 		if (filtered.isEmpty()) {
 			BoomboxMod.LOGGER.warn("No stations found with current filters");
 		} else {
-			BoomboxMod.LOGGER.info("Found {} stations", filtered.size());
+			BoomboxMod.LOGGER.debug("Found {} stations", filtered.size());
 		}
 
 		this.list.update(combined, RadioHandler.getPlaying());
@@ -185,7 +185,7 @@ public class RadioScreen extends Screen {
 			return;
 		}
 
-		BoomboxMod.LOGGER.info("Refreshing with top stations");
+		BoomboxMod.LOGGER.debug("Refreshing with top stations");
 		List<StationInfo> topStations = service.getTopStations(
 				BoomboxConfig.CLIENT.maxStations.get()
 		);
