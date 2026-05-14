@@ -4,6 +4,7 @@ import com.mrbysco.boombox.BoomboxMod;
 import com.mrbysco.boombox.registry.ModRegistry;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.LanguageProvider;
+import org.jspecify.annotations.Nullable;
 
 public class BoomboxLanguageProvider extends LanguageProvider {
 	public BoomboxLanguageProvider(PackOutput output) {
@@ -34,5 +35,23 @@ public class BoomboxLanguageProvider extends LanguageProvider {
 		this.add("boombox.networking.send_stations.failed", "Failed to update stations: %s");
 		this.add("boombox.networking.request_stations.failed", "Failed to request stations: %s");
 		this.add("boombox.networking.set_station.failed", "Failed to set station: %s");
+
+		this.addConfig("client", "Client", "Client Settings");
+		this.addConfig("volume", "Volume", "The volume of the boombox, from 0 to 100");
+		this.addConfig("maxStations", "Max Stations", "The maximum number of radio stations to display in the list");
+		this.addConfig("favorites", "Favorites", "List of favorite radio stations");
+	}
+
+	/**
+	 * Add the translation for a config entry
+	 *
+	 * @param path        The path of the config entry
+	 * @param name        The name of the config entry
+	 * @param description The description of the config entry (optional in case of targeting "title" or similar entries that have no tooltip)
+	 */
+	private void addConfig(String path, String name, @Nullable String description) {
+		this.add(BoomboxMod.MOD_ID + ".configuration." + path, name);
+		if (description != null && !description.isEmpty())
+			this.add(BoomboxMod.MOD_ID + ".configuration." + path + ".tooltip", description);
 	}
 }

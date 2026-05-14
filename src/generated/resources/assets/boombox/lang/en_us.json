@@ -1,5 +1,13 @@
 {
   "block.boombox.boombox": "Boombox",
+  "boombox.configuration.client": "Client",
+  "boombox.configuration.client.tooltip": "Client Settings",
+  "boombox.configuration.favorites": "Favorites",
+  "boombox.configuration.favorites.tooltip": "List of favorite radio stations",
+  "boombox.configuration.maxStations": "Max Stations",
+  "boombox.configuration.maxStations.tooltip": "The maximum number of radio stations to display in the list",
+  "boombox.configuration.volume": "Volume",
+  "boombox.configuration.volume.tooltip": "The volume of the boombox, from 0 to 100",
   "boombox.networking.play_station.failed": "Failed to play station: %s",
   "boombox.networking.request_stations.failed": "Failed to request stations: %s",
   "boombox.networking.send_stations.failed": "Failed to update stations: %s",
