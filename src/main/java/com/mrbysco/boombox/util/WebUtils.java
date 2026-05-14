@@ -11,6 +11,8 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.Optional;
 
+import static com.mrbysco.boombox.BoomboxMod.USER_AGENT;
+
 /**
  * This class was based on the class from ResourcefulLib which is licensed under MIT.
  */
@@ -54,7 +56,7 @@ public class WebUtils {
 			HttpRequest request = HttpRequest.newBuilder(new URI(url))
 					.GET()
 					.version(HttpClient.Version.HTTP_2)
-					.header("User-Agent", "Minecraft Mod")
+					.header("User-Agent", USER_AGENT)
 					.build();
 
 			return Optional.of(CLIENT.send(request, handler));

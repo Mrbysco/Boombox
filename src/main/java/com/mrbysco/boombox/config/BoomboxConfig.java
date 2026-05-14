@@ -9,6 +9,7 @@ public class BoomboxConfig {
 
 	public static class Client {
 		public final ModConfigSpec.IntValue volume;
+		public final ModConfigSpec.IntValue maxStations;
 		public final ModConfigSpec.ConfigValue<List<? extends String>> favorites;
 
 		Client(ModConfigSpec.Builder builder) {
@@ -18,6 +19,10 @@ public class BoomboxConfig {
 			volume = builder
 					.comment("The volume of the boombox, from 0 to 100")
 					.defineInRange("volume", 50, 0, 100);
+
+			maxStations = builder
+					.comment("The maximum number of radio stations to display in the list")
+					.defineInRange("maxStations", 100, 1, 500);
 
 			favorites = builder
 					.comment("List of favorite radio stations")

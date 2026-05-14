@@ -15,7 +15,8 @@ import java.util.function.IntFunction;
 public enum StationLocation implements StringRepresentable {
 	UNKNOWN(0, "UNKNOWN"),
 	CANADA(1, "CANADA"),
-	USA(2, "USA");
+	USA(2, "USA"),
+	EUROPE(3, "EUROPE");
 
 	public static final Codec<StationLocation> CODEC = StringRepresentable.fromEnum(StationLocation::values);
 	public static final IntFunction<StationLocation> BY_ID = ByIdMap.continuous(s -> s.id, values(), ByIdMap.OutOfBoundsStrategy.ZERO);

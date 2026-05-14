@@ -22,8 +22,23 @@ public class StationLoader {
 	).apply(instance, Function.identity()));
 
 	private static final List<StationInfo> STATIONS = new ArrayList<>();
+	private static RadioBrowserService radioBrowserService;
 
 	public static void init() {
+		try {
+			radioBrowserService = new RadioBrowserService();
+			List<StationInfo> apiStations = radioBrowserService.getTopStations(40);
+
+			if (!apiStations.isEmpty()) {
+				BoomboxMod.LOGGER.info("Loaded {} stations from RadioBrowser API", apiStations.size());
+				STATIONS.clear();
+				STATIONS.addAll(apiStations);
+				return;
+			}
+		} catch (Exception e) {
+			BoomboxMod.LOGGER.warn("Failed to load stations from RadioBrowser API, falling back to local", e);
+		}
+
 		JsonObject object = readLocalStations();
 		if (object == null) {
 			object = WebUtils.getJson("https://raw.githubusercontent.com/Mrbysco/Boombox/refs/heads/main/stations.json");
@@ -36,6 +51,10 @@ public class StationLoader {
 				.ifPresent(STATIONS::addAll);
 	}
 
+	public static RadioBrowserService getRadioBrowserService() {
+		return radioBrowserService;
+	}
+	
 	public static List<StationInfo> stations() {
 		return STATIONS;
 	}

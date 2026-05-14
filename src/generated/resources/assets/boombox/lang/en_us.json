@@ -1,7 +1,21 @@
 {
   "block.boombox.boombox": "Boombox",
+  "boombox.networking.play_station.failed": "Failed to play station: %s",
+  "boombox.networking.request_stations.failed": "Failed to request stations: %s",
+  "boombox.networking.send_stations.failed": "Failed to update stations: %s",
+  "boombox.networking.set_station.failed": "Failed to set station: %s",
+  "boombox.screen.country": "Country",
+  "boombox.screen.countryCode": "Country",
+  "boombox.screen.genre": "Genre",
+  "boombox.screen.language": "Language",
+  "boombox.screen.refresh.button.tooltip": "Refresh stations",
+  "boombox.screen.search": "Search",
+  "boombox.screen.search.button": "Search",
+  "boombox.screen.search.button.tooltip": "Search for matching stations",
+  "boombox.screen.search.hint": "Station name...",
   "boombox.screen.title": "Radio Channel Selector",
   "boombox.screen.volume": "Volume: ",
   "itemGroup.boombox": "Boombox",
+  "text.boombox.radio.country_code": "Country Code: ",
   "text.boombox.radio.none": "No Station"
 }

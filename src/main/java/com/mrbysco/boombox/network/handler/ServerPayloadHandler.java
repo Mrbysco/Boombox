@@ -30,7 +30,7 @@ public class ServerPayloadHandler {
 				})
 				.exceptionally(e -> {
 					// Handle exception
-					context.disconnect(Component.translatable("boombox.networking.send_stations.failed", e.getMessage()));
+					context.disconnect(Component.translatable("boombox.networking.request_stations.failed", e.getMessage()));
 					return null;
 				});
 	}

@@ -107,6 +107,11 @@ dependencies {
     jarJar("javazoom:jlayer:1.0.1") {
         version { strictly "1.0.1" }
     }
+
+    implementation("de.sfuhrm:radiobrowser4j:3.2.0")
+    jarJar("de.sfuhrm:radiobrowser4j:3.2.0") {
+        version { strictly "3.2.0" }
+    }
 }
 
 jar {
