@@ -1,10 +1,10 @@
 package com.mrbysco.boombox.client.screen;
 
-import com.google.common.collect.Sets;
 import com.mrbysco.boombox.client.audio.RadioHandler;
-import com.mrbysco.boombox.config.BoomboxConfig;
 import com.mrbysco.boombox.network.server.SetStationPayload;
+import com.mrbysco.boombox.util.FavoriteHelper;
 import com.mrbysco.boombox.util.StationInfo;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.ObjectSelectionList;
@@ -12,6 +12,7 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.util.FormattedCharSequence;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,12 +56,13 @@ public class RadioList extends ObjectSelectionList<RadioList.RadioEntry> {
 	private void update() {
 		RadioEntry selected = null;
 		List<RadioEntry> entries = new ArrayList<>();
-		Set<String> favoriteUrls = Sets.newHashSet(BoomboxConfig.CLIENT.favorites.get());
+		Set<String> favoriteKeys = FavoriteHelper.getFavoriteKeys();
 		List<StationInfo> favorites = new ArrayList<>();
 		List<StationInfo> others = new ArrayList<>();
 
 		for (StationInfo station : this.stations) {
-			if (favoriteUrls.contains(station.url())) {
+			String key = FavoriteHelper.getFavoriteKey(station);
+			if (favoriteKeys.contains(key)) {
 				favorites.add(station);
 			} else {
 				others.add(station);
@@ -137,22 +139,26 @@ public class RadioList extends ObjectSelectionList<RadioList.RadioEntry> {
 
 			if (hovered) {
 				if (info != null) {
-					graphics.setTooltipForNextFrame(Component.literal(info.name()), mouseX, mouseY);
+					graphics.setTooltipForNextFrame(getTooltip(), mouseX, mouseY);
 				}
 			}
 		}
 
+		private List<FormattedCharSequence> getTooltip() {
+			List<FormattedCharSequence> tooltip = new ArrayList<>();
+			tooltip.add(Component.literal(info.name()).withStyle(ChatFormatting.GRAY).getVisualOrderText());
+
+			if (!info.countryCode().isEmpty()) {
+				tooltip.add(Component.translatable("text.boombox.radio.country_code").append(Component.literal(info.countryCode())).getVisualOrderText());
+			}
+			return tooltip;
+		}
+
+
 		@Override
 		public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-			if (Minecraft.getInstance().hasShiftDown()) {
-				List<String> favorites = new ArrayList<>(BoomboxConfig.CLIENT.favorites.get());
-				if (favorite) {
-					favorites.remove(info.url());
-				} else {
-					favorites.add(info.url());
-				}
-				BoomboxConfig.CLIENT.favorites.set(favorites);
-				BoomboxConfig.CLIENT.favorites.save();
+			if (Minecraft.getInstance().hasShiftDown() && info != null) {
+				FavoriteHelper.toggleFavorite(info);
 				update();
 				return true;
 			}

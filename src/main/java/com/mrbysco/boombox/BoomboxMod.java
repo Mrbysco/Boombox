@@ -20,6 +20,7 @@ public class BoomboxMod {
 	public static final String MOD_ID = "boombox";
 	public static final Logger LOGGER = LogUtils.getLogger();
 	public static final Gson GSON = new Gson();
+	public static final String USER_AGENT = "Boombox Minecraft Mod (https://github.com/Mrbysco/Boombox)";
 
 	public BoomboxMod(IEventBus eventBus, Dist dist, ModContainer container) {
 		StationLoader.init();

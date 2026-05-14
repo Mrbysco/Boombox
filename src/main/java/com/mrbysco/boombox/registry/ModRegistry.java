@@ -27,6 +27,7 @@ public class ModRegistry {
 	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, BoomboxMod.MOD_ID);
 	public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, BoomboxMod.MOD_ID);
 
+	@SuppressWarnings("deprecation")
 	public static final DeferredBlock<BoomboxBlock> BOOMBOX = BLOCKS.registerBlock("boombox", BoomboxBlock::new, () -> BlockBehaviour.Properties.ofLegacyCopy(Blocks.NOTE_BLOCK).strength(1));
 
 	public static final DeferredItem<BlockItem> BOOMBOX_ITEM = ITEMS.registerSimpleBlockItem(BOOMBOX);
