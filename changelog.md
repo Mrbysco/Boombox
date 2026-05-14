@@ -1,3 +1,3 @@
-## The API Update
-* The mod now makes use of RadioBrowser4J which is a java wrapper for [RadioBrowser](https://www.radio-browser.info/)
-* You'll be able to search for stations by name, country, language and genre
+* Fix searched channels not playing
+* Remove old JSON based radio station system
+* Add indication that channels are being gathered while opening the Boombox UI
