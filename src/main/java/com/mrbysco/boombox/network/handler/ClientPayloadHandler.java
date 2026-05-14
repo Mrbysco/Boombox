@@ -1,9 +1,7 @@
 package com.mrbysco.boombox.network.handler;
 
 import com.mrbysco.boombox.client.audio.RadioHandler;
-import com.mrbysco.boombox.client.screen.RadioScreen;
 import com.mrbysco.boombox.network.client.PlayStationPayload;
-import com.mrbysco.boombox.network.client.SendStationsPayload;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -30,17 +28,6 @@ public class ClientPayloadHandler {
 				.exceptionally(e -> {
 					// Handle exception
 					context.disconnect(Component.translatable("boombox.networking.play_station.failed", e.getMessage()));
-					return null;
-				});
-	}
-
-	public void handleSendStations(final SendStationsPayload data, final IPayloadContext context) {
-		context.enqueueWork(() -> {
-					RadioScreen.handleStationUpdates(data.stations());
-				})
-				.exceptionally(e -> {
-					// Handle exception
-					context.disconnect(Component.translatable("boombox.networking.send_stations.failed", e.getMessage()));
 					return null;
 				});
 	}

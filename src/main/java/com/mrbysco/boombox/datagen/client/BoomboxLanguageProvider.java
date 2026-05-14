@@ -28,6 +28,7 @@ public class BoomboxLanguageProvider extends LanguageProvider {
 		this.add("boombox.screen.search.hint", "Station name...");
 		this.add("boombox.screen.title", "Radio Channel Selector");
 		this.add("boombox.screen.volume", "Volume: ");
+		this.add("boombox.screen.loading", "Gathering channels...");
 
 		this.add("itemGroup.boombox", "Boombox");
 

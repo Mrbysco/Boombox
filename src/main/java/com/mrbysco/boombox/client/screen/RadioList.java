@@ -105,6 +105,7 @@ public class RadioList extends ObjectSelectionList<RadioList.RadioEntry> {
 			if (info == null) {
 				ClientPacketDistributor.sendToServer(new SetStationPayload("", pos));
 			} else if (!Objects.equals(RadioHandler.getPlaying(), info.url())) {
+				System.out.println(info.url());
 				ClientPacketDistributor.sendToServer(new SetStationPayload(info.url(), pos));
 			}
 		}

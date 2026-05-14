@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import static com.mrbysco.boombox.BoomboxMod.USER_AGENT;
@@ -38,6 +39,32 @@ public class RadioBrowserService {
 		} catch (IOException e) {
 			BoomboxMod.LOGGER.error("Failed to initialize RadioBrowser API", e);
 		}
+	}
+
+	/**
+	 * Get top stations asynchronously (non-blocking)
+	 *
+	 * @param limit - max number of results to return
+	 * @return CompletableFuture that will complete with the list of top stations
+	 */
+	public CompletableFuture<List<StationInfo>> getTopStationsAsync(int limit) {
+		return CompletableFuture.supplyAsync(() ->
+				getTopStations(limit));
+	}
+
+	/**
+	 * Search for stations asynchronously with optional filters (non-blocking)
+	 *
+	 * @param limit       - max number of results to return
+	 * @param countryCode - filter by countryCode code (e.g. "US", "CA")
+	 * @param language    - filter by language (e.g. "english", "spanish")
+	 * @param tag         - filter by tag/genre (e.g. "rock", "jazz")
+	 * @param searchTerm  - filter by station name (partial match)
+	 * @return CompletableFuture that will complete with the list of matching stations
+	 */
+	public CompletableFuture<List<StationInfo>> searchStationsAsync(int limit, String countryCode, String language, String tag, String searchTerm) {
+		return CompletableFuture.supplyAsync(() ->
+				searchStations(limit, countryCode, language, tag, searchTerm));
 	}
 
 	/**

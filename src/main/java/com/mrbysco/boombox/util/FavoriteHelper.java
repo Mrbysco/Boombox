@@ -16,11 +16,6 @@ public class FavoriteHelper {
 				.orElse(station.url());
 	}
 
-	public static boolean isFavorite(StationInfo station) {
-		String key = getFavoriteKey(station);
-		return BoomboxConfig.CLIENT.favorites.get().contains(key);
-	}
-
 	public static void toggleFavorite(StationInfo station) {
 		List<String> favorites = new ArrayList<>(BoomboxConfig.CLIENT.favorites.get());
 		String key = getFavoriteKey(station);

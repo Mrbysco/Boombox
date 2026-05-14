@@ -3,11 +3,11 @@ package com.mrbysco.boombox.client.screen;
 import com.mrbysco.boombox.BoomboxMod;
 import com.mrbysco.boombox.client.audio.RadioHandler;
 import com.mrbysco.boombox.config.BoomboxConfig;
-import com.mrbysco.boombox.network.server.RequestStationsPayload;
 import com.mrbysco.boombox.util.FavoriteHelper;
 import com.mrbysco.boombox.util.RadioBrowserService;
 import com.mrbysco.boombox.util.StationInfo;
 import com.mrbysco.boombox.util.StationLoader;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
@@ -17,14 +17,12 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class RadioScreen extends Screen {
@@ -37,6 +35,7 @@ public class RadioScreen extends Screen {
 	private CycleButton<String> countryButton;
 	private CycleButton<String> languageButton;
 	private CycleButton<String> genreButton;
+	private boolean isLoading;
 
 	@Nullable
 	private final BlockPos pos;
@@ -46,7 +45,6 @@ public class RadioScreen extends Screen {
 	public RadioScreen(@Nullable BlockPos pos) {
 		super(title);
 		this.pos = pos;
-		ClientPacketDistributor.sendToServer(new RequestStationsPayload());
 	}
 
 	@Override
@@ -56,9 +54,14 @@ public class RadioScreen extends Screen {
 		int fullButtonHeight = 34;
 		this.list = new RadioList(this, width, fullButtonHeight, y - font.lineHeight - 6, pos);
 		this.list.setX(0);
-		if (!this.stations.isEmpty()) {
-			this.list.update(this.stations, RadioHandler.getPlaying());
+
+		if (this.stations.isEmpty()) {
+			loadTopStationsAsync();
+		} else {
+			List<StationInfo> combined = mergeFavorites(this.stations);
+			this.list.update(combined, RadioHandler.getPlaying());
 		}
+
 		this.addWidget(this.list);
 
 		// Volume slider
@@ -144,6 +147,29 @@ public class RadioScreen extends Screen {
 		searchBox.setValue(oldSearch);
 	}
 
+	private void loadTopStationsAsync() {
+		RadioBrowserService service = StationLoader.getRadioBrowserService();
+		if (service == null) return;
+
+		isLoading = true;
+		service.getTopStationsAsync(BoomboxConfig.CLIENT.maxStations.get())
+				.thenAcceptAsync(topStations -> {
+					Minecraft.getInstance().execute(() -> {
+						isLoading = false;
+						if (this.list != null) {
+							List<StationInfo> combined = mergeFavorites(topStations);
+							this.list.update(combined, RadioHandler.getPlaying());
+							this.stations.clear();
+							this.stations.addAll(combined);
+						}
+					});
+				})
+				.exceptionally(e -> {
+					BoomboxMod.LOGGER.error("Failed to load top stations", e);
+					return null;
+				});
+	}
+
 	private void applyFilters() {
 		RadioBrowserService service = StationLoader.getRadioBrowserService();
 		if (service == null) {
@@ -156,46 +182,49 @@ public class RadioScreen extends Screen {
 		String genre = "All".equals(genreButton.getValue()) ? null : genreButton.getValue();
 		String search = searchBox.getValue().isEmpty() ? null : searchBox.getValue();
 
-		BoomboxMod.LOGGER.debug("Searching stations with filters - Country: {}, Language: {}, Genre: {}, Search: {}",
-				country, language, genre, search);
-
-		List<StationInfo> filtered = service.searchStations(
+		isLoading = true;
+		service.searchStationsAsync(
 				BoomboxConfig.CLIENT.maxStations.get(),
 				country,
 				language,
 				genre,
 				search
-		);
-
-		List<StationInfo> combined = mergeFavorites(filtered);
-
-		if (filtered.isEmpty()) {
-			BoomboxMod.LOGGER.warn("No stations found with current filters");
-		} else {
-			BoomboxMod.LOGGER.debug("Found {} stations", filtered.size());
-		}
-
-		this.list.update(combined, RadioHandler.getPlaying());
+		).thenAcceptAsync(filtered -> {
+			Minecraft.getInstance().execute(() -> {
+				isLoading = false;
+				if (this.list != null) {
+					List<StationInfo> combined = mergeFavorites(filtered);
+					this.list.update(combined, RadioHandler.getPlaying());
+				}
+			});
+		}).exceptionally(e -> {
+			BoomboxMod.LOGGER.error("Failed to search stations", e);
+			return null;
+		});
 	}
 
 	private void refreshStations() {
 		RadioBrowserService service = StationLoader.getRadioBrowserService();
 		if (service == null) {
-			ClientPacketDistributor.sendToServer(new RequestStationsPayload());
 			return;
 		}
 
-		BoomboxMod.LOGGER.debug("Refreshing with top stations");
-		List<StationInfo> topStations = service.getTopStations(
-				BoomboxConfig.CLIENT.maxStations.get()
-		);
-
-		List<StationInfo> combined = mergeFavorites(topStations);
-
-		this.list.update(combined, RadioHandler.getPlaying());
-
-		//Reset search
-		this.searchBox.setValue("");
+		isLoading = true;
+		service.getTopStationsAsync(BoomboxConfig.CLIENT.maxStations.get())
+				.thenAcceptAsync(topStations -> {
+					Minecraft.getInstance().execute(() -> {
+						isLoading = false;
+						if (this.list != null) {
+							List<StationInfo> combined = mergeFavorites(topStations);
+							this.list.update(combined, RadioHandler.getPlaying());
+							this.searchBox.setValue("");
+						}
+					});
+				})
+				.exceptionally(e -> {
+					BoomboxMod.LOGGER.error("Failed to refresh stations", e);
+					return null;
+				});
 	}
 
 	private List<StationInfo> mergeFavorites(List<StationInfo> apiResults) {
@@ -284,22 +313,15 @@ public class RadioScreen extends Screen {
 		this.list.extractRenderState(graphics, mouseX, mouseY, partialTicks);
 
 		graphics.centeredText(font, title, this.width / 2 + 6, 6, -1);
+
+		if (isLoading) {
+			Component loadingText = Component.translatable("boombox.screen.loading").withStyle(ChatFormatting.YELLOW);
+			graphics.centeredText(font, loadingText, this.width / 2, this.height / 2, 0xFFFFFFFF);
+		}
 	}
 
 	@Override
 	public boolean isPauseScreen() {
 		return false;
-	}
-
-	public static void handleStationUpdates(List<StationInfo> stations) {
-		if (Minecraft.getInstance().screen instanceof RadioScreen screen) {
-			screen.list.update(stations, RadioHandler.getPlaying());
-			screen.stations.clear();
-			screen.stationNames.clear();
-			for (StationInfo station : stations) {
-				screen.stationNames.put(station.url().toLowerCase(Locale.ROOT), station.name());
-				screen.stations.add(station);
-			}
-		}
 	}
 }

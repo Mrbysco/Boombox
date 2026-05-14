@@ -16,6 +16,7 @@
   "boombox.screen.countryCode": "Country",
   "boombox.screen.genre": "Genre",
   "boombox.screen.language": "Language",
+  "boombox.screen.loading": "Gathering channels...",
   "boombox.screen.refresh.button.tooltip": "Refresh stations",
   "boombox.screen.search": "Search",
   "boombox.screen.search.button": "Search",

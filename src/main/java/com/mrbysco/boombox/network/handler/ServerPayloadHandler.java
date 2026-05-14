@@ -1,14 +1,9 @@
 package com.mrbysco.boombox.network.handler;
 
-import com.mrbysco.boombox.network.client.SendStationsPayload;
-import com.mrbysco.boombox.network.server.RequestStationsPayload;
 import com.mrbysco.boombox.network.server.SetStationPayload;
 import com.mrbysco.boombox.util.RadioHolder;
-import com.mrbysco.boombox.util.StationLoader;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class ServerPayloadHandler {
@@ -16,23 +11,6 @@ public class ServerPayloadHandler {
 
 	public static ServerPayloadHandler getInstance() {
 		return INSTANCE;
-	}
-
-	public void handleRequestStations(final RequestStationsPayload data, final IPayloadContext context) {
-		context.enqueueWork(() -> {
-					//Execute craft if button is pressed
-					if (context.player() != null) {
-						Player player = context.player();
-						if (player instanceof ServerPlayer serverPlayer) {
-							PacketDistributor.sendToPlayer(serverPlayer, new SendStationsPayload(StationLoader.stations()));
-						}
-					}
-				})
-				.exceptionally(e -> {
-					// Handle exception
-					context.disconnect(Component.translatable("boombox.networking.request_stations.failed", e.getMessage()));
-					return null;
-				});
 	}
 
 	public void handleSetStation(final SetStationPayload data, final IPayloadContext context) {
@@ -58,8 +36,16 @@ public class ServerPayloadHandler {
 	}
 
 	private void playStation(RadioHolder holder, String url) {
-		if (StationLoader.hasStation(url) || url.isBlank()) {
+		if (url.isBlank() || isValidStreamUrl(url)) {
 			holder.setRadioUrl(url);
 		}
+	}
+
+	private boolean isValidStreamUrl(String url) {
+		if (url == null || url.isEmpty()) {
+			return false;
+		}
+		String lower = url.toLowerCase();
+		return lower.startsWith("http://") || lower.startsWith("https://");
 	}
 }
