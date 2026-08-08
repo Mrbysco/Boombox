@@ -44,7 +44,7 @@ public class RadioHandler {
 	private static RadioSoundInstance lastStation = null;
 
 	public static void open(@Nullable BlockPos pos) {
-		Minecraft.getInstance().setScreen(new RadioScreen(pos));
+		Minecraft.getInstance().gui.setScreen(new RadioScreen(pos));
 	}
 
 

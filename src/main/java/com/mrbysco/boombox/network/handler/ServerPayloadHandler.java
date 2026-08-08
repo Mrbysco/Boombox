@@ -4,6 +4,7 @@ import com.mrbysco.boombox.network.server.SetStationPayload;
 import com.mrbysco.boombox.util.RadioHolder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class ServerPayloadHandler {
@@ -19,7 +20,7 @@ public class ServerPayloadHandler {
 					if (context.player() != null) {
 						Player player = context.player();
 						if (data.pos().isPresent()) {
-							boolean inRange = player.distanceToSqr(data.pos().get().getCenter()) <= 64;
+							boolean inRange = player.distanceToSqr(Vec3.atCenterOf(data.pos().get())) <= 64;
 							if (inRange && player.level().getBlockEntity(data.pos().get()) instanceof RadioHolder holder) {
 								playStation(holder, data.url());
 							}
