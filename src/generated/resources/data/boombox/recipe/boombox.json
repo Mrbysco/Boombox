@@ -2,8 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "I": "#c:ingots/iron",
-    "N": "minecraft:note_block"
+    "I": {
+      "tag": "c:ingots/iron"
+    },
+    "N": {
+      "item": "minecraft:note_block"
+    }
   },
   "pattern": [
     " I ",
@@ -11,6 +15,7 @@
     " I "
   ],
   "result": {
+    "count": 1,
     "id": "boombox:boombox"
   }
 }

@@ -3,6 +3,7 @@ package com.mrbysco.boombox.client.audio;
 import com.google.common.hash.Hashing;
 import com.mrbysco.boombox.BoomboxMod;
 import com.mrbysco.boombox.config.BoomboxConfig;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.AbstractSoundInstance;
 import net.minecraft.client.resources.sounds.Sound;
@@ -11,10 +12,9 @@ import net.minecraft.client.sounds.AudioStream;
 import net.minecraft.client.sounds.SoundBufferLibrary;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.client.sounds.WeighedSoundEvents;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.Util;
 import net.minecraft.util.valueproviders.ConstantFloat;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,7 +32,7 @@ public sealed class RadioSoundInstance extends AbstractSoundInstance implements 
 	@SuppressWarnings("deprecation")
 	public RadioSoundInstance(String url, RandomSource randomSource) {
 		super(
-				Identifier.fromNamespaceAndPath(BoomboxMod.MOD_ID, "radio/" + Hashing.sha1().hashUnencodedChars(url)),
+				ResourceLocation.fromNamespaceAndPath(BoomboxMod.MOD_ID, "radio/" + Hashing.sha1().hashUnencodedChars(url)),
 				SoundSource.MASTER,
 				randomSource
 		);
@@ -41,9 +41,9 @@ public sealed class RadioSoundInstance extends AbstractSoundInstance implements 
 
 	@Override
 	public WeighedSoundEvents resolve(@NotNull SoundManager manager) {
-		WeighedSoundEvents soundEvents = new WeighedSoundEvents(this.getIdentifier(), null);
+		WeighedSoundEvents soundEvents = new WeighedSoundEvents(this.getLocation(), null);
 		soundEvents.addSound(new Sound(
-				getIdentifier(),
+				getLocation(),
 				ConstantFloat.of(1f),
 				ConstantFloat.of(1f),
 				1,

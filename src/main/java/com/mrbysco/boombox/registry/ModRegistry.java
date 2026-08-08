@@ -28,12 +28,12 @@ public class ModRegistry {
 	public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, BoomboxMod.MOD_ID);
 
 	@SuppressWarnings("deprecation")
-	public static final DeferredBlock<BoomboxBlock> BOOMBOX = BLOCKS.registerBlock("boombox", BoomboxBlock::new, () -> BlockBehaviour.Properties.ofLegacyCopy(Blocks.NOTE_BLOCK).strength(1));
+	public static final DeferredBlock<BoomboxBlock> BOOMBOX = BLOCKS.registerBlock("boombox", BoomboxBlock::new, BlockBehaviour.Properties.ofLegacyCopy(Blocks.NOTE_BLOCK).strength(1));
 
 	public static final DeferredItem<BlockItem> BOOMBOX_ITEM = ITEMS.registerSimpleBlockItem(BOOMBOX);
 
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BoomboxBlockEntity>> BOOMBOX_BE = BLOCK_ENTITY_TYPES.register("boombox", () ->
-			new BlockEntityType<>(BoomboxBlockEntity::new, ModRegistry.BOOMBOX.get()));
+			BlockEntityType.Builder.of(BoomboxBlockEntity::new, ModRegistry.BOOMBOX.get()).build(null));
 
 	public static final Supplier<CreativeModeTab> BOOMBOX_TAB = CREATIVE_MODE_TABS.register("tab", () -> CreativeModeTab.builder()
 			.icon(() -> new ItemStack(ModRegistry.BOOMBOX.get()))

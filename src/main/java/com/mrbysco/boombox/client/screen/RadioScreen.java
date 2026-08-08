@@ -9,7 +9,8 @@ import com.mrbysco.boombox.util.StationInfo;
 import com.mrbysco.boombox.util.StationLoader;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.components.EditBox;
@@ -82,7 +83,8 @@ public class RadioScreen extends Screen {
 
 		// Country
 		List<String> countries = getCommonCountries();
-		this.countryButton = CycleButton.builder((value -> Component.literal(capitalizeFirst(value))), "All")
+		this.countryButton = CycleButton.<String>builder((value -> Component.literal(capitalizeFirst(value))))
+				.withInitialValue("All")
 				.withValues(countries)
 				.withTooltip((value) -> Tooltip.create(Component.literal(capitalizeFirst(value))))
 				.create(x, bottomControlY, 70, 20, Component.translatable("boombox.screen.country"));
@@ -91,7 +93,8 @@ public class RadioScreen extends Screen {
 
 		// Language
 		List<String> languages = getCommonLanguages();
-		this.languageButton = CycleButton.builder((value -> Component.literal(capitalizeFirst(value))), "All")
+		this.languageButton = CycleButton.<String>builder((value -> Component.literal(capitalizeFirst(value))))
+				.withInitialValue("All")
 				.withValues(languages)
 				.withTooltip((value) -> Tooltip.create(Component.literal(capitalizeFirst(value))))
 				.create(x, bottomControlY, 70, 20, Component.translatable("boombox.screen.language"));
@@ -100,7 +103,8 @@ public class RadioScreen extends Screen {
 
 		// Genre
 		List<String> genres = getCommonGenres();
-		this.genreButton = CycleButton.builder((value -> Component.literal(capitalizeFirst(value))), "All")
+		this.genreButton = CycleButton.<String>builder((value -> Component.literal(capitalizeFirst(value))))
+				.withInitialValue("All")
 				.withValues(genres)
 				.withTooltip((value) -> Tooltip.create(Component.literal(capitalizeFirst(value))))
 				.create(x, bottomControlY, 70, 20, Component.translatable("boombox.screen.genre"));
@@ -133,13 +137,13 @@ public class RadioScreen extends Screen {
 	}
 
 	@Override
-	public void resize(int width, int height) {
+	public void resize(Minecraft mc, int width, int height) {
 		// Get current button values before resizing
 		String oldCountry = countryButton.getValue();
 		String oldLanguage = languageButton.getValue();
 		String oldGenre = genreButton.getValue();
 		String oldSearch = searchBox.getValue();
-		super.resize(width, height);
+		super.resize(mc, width, height);
 		// Revert to old button values after resizing
 		countryButton.setValue(oldCountry);
 		languageButton.setValue(oldLanguage);
@@ -307,21 +311,25 @@ public class RadioScreen extends Screen {
 	}
 
 	@Override
-	public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
-		super.extractRenderState(graphics, mouseX, mouseY, partialTicks);
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+		super.render(guiGraphics, mouseX, mouseY, partialTick);
 
-		this.list.extractRenderState(graphics, mouseX, mouseY, partialTicks);
+		this.list.render(guiGraphics, mouseX, mouseY, partialTick);
 
-		graphics.centeredText(font, title, this.width / 2 + 6, 6, -1);
+		guiGraphics.drawCenteredString(font, title, this.width / 2 + 6, 6, -1);
 
 		if (isLoading) {
 			Component loadingText = Component.translatable("boombox.screen.loading").withStyle(ChatFormatting.YELLOW);
-			graphics.centeredText(font, loadingText, this.width / 2, this.height / 2, 0xFFFFFFFF);
+			guiGraphics.drawCenteredString(font, loadingText, this.width / 2, this.height / 2, 0xFFFFFFFF);
 		}
 	}
 
 	@Override
 	public boolean isPauseScreen() {
 		return false;
+	}
+
+	public Font getFont() {
+		return font;
 	}
 }

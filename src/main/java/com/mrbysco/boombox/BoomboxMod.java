@@ -5,7 +5,7 @@ import com.mojang.logging.LogUtils;
 import com.mrbysco.boombox.config.BoomboxConfig;
 import com.mrbysco.boombox.registry.ModRegistry;
 import com.mrbysco.boombox.util.StationLoader;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -36,7 +36,7 @@ public class BoomboxMod {
 		}
 	}
 
-	public static Identifier modLoc(String path) {
-		return Identifier.fromNamespaceAndPath(MOD_ID, path);
+	public static ResourceLocation modLoc(String path) {
+		return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
 	}
 }

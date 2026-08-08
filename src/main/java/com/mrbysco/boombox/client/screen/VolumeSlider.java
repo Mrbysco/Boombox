@@ -1,7 +1,6 @@
 package com.mrbysco.boombox.client.screen;
 
 import com.mrbysco.boombox.config.BoomboxConfig;
-import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.client.gui.widget.ExtendedSlider;
 
@@ -15,8 +14,8 @@ public class VolumeSlider extends ExtendedSlider {
 	}
 
 	@Override
-	public void onRelease(MouseButtonEvent event) {
-		super.onRelease(event);
+	public void onRelease(double mouseX, double mouseY) {
+		super.onRelease(mouseX, mouseY);
 		int newVolume = getValueInt();
 		int volume = BoomboxConfig.CLIENT.volume.getAsInt();
 		if (volume != newVolume) {

@@ -4,7 +4,7 @@ import com.mrbysco.boombox.BoomboxMod;
 import com.mrbysco.boombox.registry.ModRegistry;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.LanguageProvider;
-import org.jspecify.annotations.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class BoomboxLanguageProvider extends LanguageProvider {
 	public BoomboxLanguageProvider(PackOutput output) {

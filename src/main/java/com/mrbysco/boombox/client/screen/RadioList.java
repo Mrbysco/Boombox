@@ -6,14 +6,14 @@ import com.mrbysco.boombox.util.FavoriteHelper;
 import com.mrbysco.boombox.util.StationInfo;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ObjectSelectionList;
-import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.FormattedCharSequence;
-import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -38,8 +38,8 @@ public class RadioList extends ObjectSelectionList<RadioList.RadioEntry> {
 	}
 
 	@Override
-	protected int scrollBarX() {
-		return this.listWidth - 6;
+	protected int getScrollbarPosition() {
+		return this.getX() + this.listWidth - 6;
 	}
 
 	@Override
@@ -103,10 +103,9 @@ public class RadioList extends ObjectSelectionList<RadioList.RadioEntry> {
 		if (selected != null) {
 			StationInfo info = selected.info;
 			if (info == null) {
-				ClientPacketDistributor.sendToServer(new SetStationPayload("", pos));
+				PacketDistributor.sendToServer(new SetStationPayload("", pos));
 			} else if (!Objects.equals(RadioHandler.getPlaying(), info.url())) {
-				System.out.println(info.url());
-				ClientPacketDistributor.sendToServer(new SetStationPayload(info.url(), pos));
+				PacketDistributor.sendToServer(new SetStationPayload(info.url(), pos));
 			}
 		}
 	}
@@ -126,21 +125,19 @@ public class RadioList extends ObjectSelectionList<RadioList.RadioEntry> {
 		}
 
 		@Override
-		public void extractContent(GuiGraphicsExtractor graphics, int mouseX, int mouseY, boolean hovered, float a) {
-			int left = getContentX();
-			int top = getContentY();
-
+		public void render(GuiGraphics guiGraphics, int index, int top, int left,
+		                   int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
 			int textStart = left + 3;
 			MutableComponent text = getName().copy();
 			if (this.info != null) {
 				text.append(" " + (favorite ? "★" : "☆"));
 			}
 
-			graphics.text(Minecraft.getInstance().font, text, textStart, top + 3, 0xFFFFFFff);
+			guiGraphics.drawString(Minecraft.getInstance().font, text, textStart, top + 3, 0xFFFFFFff);
 
-			if (hovered) {
+			if (hovering) {
 				if (info != null) {
-					graphics.setTooltipForNextFrame(getTooltip(), mouseX, mouseY);
+					guiGraphics.renderTooltip(Minecraft.getInstance().font, getTooltip(), mouseX, mouseY);
 				}
 			}
 		}
@@ -155,16 +152,15 @@ public class RadioList extends ObjectSelectionList<RadioList.RadioEntry> {
 			return tooltip;
 		}
 
-
 		@Override
-		public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-			if (Minecraft.getInstance().hasShiftDown() && info != null) {
+		public boolean mouseClicked(double mouseX, double mouseY, int button) {
+			if (Screen.hasShiftDown() && info != null) {
 				FavoriteHelper.toggleFavorite(info);
 				update();
 				return true;
 			}
 
-			return super.mouseClicked(event, doubleClick);
+			return super.mouseClicked(mouseX, mouseY, button);
 		}
 
 		private Component getName() {

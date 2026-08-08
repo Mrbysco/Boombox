@@ -13,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -20,7 +21,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jspecify.annotations.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class BoomboxBlock extends BaseEntityBlock {
 
@@ -35,6 +36,11 @@ public class BoomboxBlock extends BaseEntityBlock {
 
 		registerDefaultState(defaultBlockState()
 				.setValue(FACING, Direction.NORTH));
+	}
+
+	@Override
+	protected RenderShape getRenderShape(BlockState state) {
+		return RenderShape.MODEL;
 	}
 
 	@Override
@@ -53,16 +59,18 @@ public class BoomboxBlock extends BaseEntityBlock {
 		if (level.isClientSide()) {
 			RadioHandler.open(pos);
 		}
-		return super.useWithoutItem(state, level, pos, player, hitResult);
+		return InteractionResult.SUCCESS;
 	}
 
+	@Nullable
 	@Override
-	public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+	public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
 		return new BoomboxBlockEntity(blockPos, blockState);
 	}
 
+	@Nullable
 	@Override
-	public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
 	}
 
