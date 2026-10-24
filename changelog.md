@@ -1,1 +1,1 @@
-* Remove leftover logging
+* Update to 26.3
