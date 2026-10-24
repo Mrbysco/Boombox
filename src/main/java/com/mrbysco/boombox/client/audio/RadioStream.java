@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.concurrent.CompletableFuture;
@@ -34,21 +35,21 @@ public class RadioStream extends InputStream {
 	public RadioStream(IoSupplier<InputStream> inputStream) {
 		AtomicBoolean setup = new AtomicBoolean(true);
 		this.getter = CompletableFuture.runAsync(() -> {
-			try (InputStream stream = inputStream.get()) {
+			try (InputStream stream = inputStream.get();
+			     ReadableByteChannel channel = Channels.newChannel(stream)) {
 				while (!this.closed.get()) {
 					ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
-					IOUtils.read(Channels.newChannel(stream), buffer);
+					int read = IOUtils.read(channel, buffer);
 					buffer.flip();
 
 					if (this.closed.get()) break;
-					if (buffer.hasRemaining()) {
+					if (read <= 0) break;
 
-						wait(this.waiting);
+					wait(this.waiting);
 
-						this.cache.add(buffer);
-						if (this.cache.size() > SIZE) {
-							this.waiting.set(true);
-						}
+					this.cache.add(buffer);
+					if (this.cache.size() > SIZE) {
+						this.waiting.set(true);
 					}
 
 					if (this.cache.size() >= SIZE) {
