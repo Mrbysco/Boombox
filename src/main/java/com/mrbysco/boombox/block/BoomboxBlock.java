@@ -1,6 +1,5 @@
 package com.mrbysco.boombox.block;
 
-import com.mojang.serialization.MapCodec;
 import com.mrbysco.boombox.block.blockentity.BoomboxBlockEntity;
 import com.mrbysco.boombox.client.audio.RadioHandler;
 import net.minecraft.core.BlockPos;
@@ -27,7 +26,6 @@ public class BoomboxBlock extends BaseEntityBlock {
 	public static final VoxelShape SHAPE = Block.box(0, 0, 7, 16, 12, 9);
 	public static final VoxelShape SHAPE2 = Block.box(7, 0, 0, 9, 12, 16);
 
-	public static final MapCodec<BoomboxBlock> CODEC = simpleCodec(BoomboxBlock::new);
 	public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
 
 	public BoomboxBlock(Properties properties) {
@@ -35,11 +33,6 @@ public class BoomboxBlock extends BaseEntityBlock {
 
 		registerDefaultState(defaultBlockState()
 				.setValue(FACING, Direction.NORTH));
-	}
-
-	@Override
-	protected MapCodec<? extends BaseEntityBlock> codec() {
-		return CODEC;
 	}
 
 	@Override

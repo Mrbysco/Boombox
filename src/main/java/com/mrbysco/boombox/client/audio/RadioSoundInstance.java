@@ -17,6 +17,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.Util;
 import net.minecraft.util.valueproviders.ConstantFloat;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
@@ -40,7 +41,7 @@ public sealed class RadioSoundInstance extends AbstractSoundInstance implements 
 	}
 
 	@Override
-	public WeighedSoundEvents resolve(@NotNull SoundManager manager) {
+	public @Nullable WeighedSoundEvents getOrResolve(SoundManager soundManager) {
 		WeighedSoundEvents soundEvents = new WeighedSoundEvents(this.getIdentifier(), null);
 		soundEvents.addSound(new Sound(
 				getIdentifier(),
