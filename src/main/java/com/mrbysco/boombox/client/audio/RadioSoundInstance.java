@@ -29,6 +29,7 @@ public sealed class RadioSoundInstance extends AbstractSoundInstance implements 
 
 	protected final String url;
 	protected boolean stopped = false;
+	protected long lastTick = -1L;
 
 	@SuppressWarnings("deprecation")
 	public RadioSoundInstance(String url, RandomSource randomSource) {
@@ -69,6 +70,15 @@ public sealed class RadioSoundInstance extends AbstractSoundInstance implements 
 
 	@Override
 	public void tick() {
+		long now = System.nanoTime();
+		if (this.lastTick != -1L && now - this.lastTick > 1_000_000_000L) {
+			this.stopped = true;
+			RadioHandler.restart(this);
+			return;
+		}
+
+		this.lastTick = now;
+
 		if (this != RadioHandler.getLastStation()) {
 			this.stopped = true;
 			return;
