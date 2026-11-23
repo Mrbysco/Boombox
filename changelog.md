@@ -1,1 +1,1 @@
-* Update to 26.3
+* Restart the stream when unpaused
