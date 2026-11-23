@@ -105,6 +105,17 @@ public class RadioHandler {
 		lastStation = null;
 	}
 
+	public static void restart(RadioSoundInstance oldSoundInstance) {
+		Minecraft.getInstance().schedule(() -> {
+			if (oldSoundInstance != lastStation) return;
+			if (oldSoundInstance instanceof StaticRadioSoundInstance staticInstance) {
+				play(oldSoundInstance.url(), RandomSource.create(), BlockPos.containing(staticInstance.source()));
+			} else {
+				play(oldSoundInstance.url(), RandomSource.create());
+			}
+		});
+	}
+
 	private static void stopRadioInstances() {
 		SoundManager manager = Minecraft.getInstance().getSoundManager();
 		SoundEngine engine = manager.soundEngine;

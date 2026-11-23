@@ -41,4 +41,8 @@ public final class StaticRadioSoundInstance extends RadioSoundInstance {
 		float rangePercent = 1f - (float) Math.max((range - (RadioHolder.RANGE - RadioHolder.RANGE_DROPOFF)) / RadioHolder.RANGE_DROPOFF, 0f);
 		return super.getVolume() * rangePercent;
 	}
+
+	public Vec3 source() {
+		return this.source;
+	}
 }
