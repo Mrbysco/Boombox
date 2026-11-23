@@ -1,1 +1,1 @@
-* Remove leftover logging
+* Restart the stream when unpaused
