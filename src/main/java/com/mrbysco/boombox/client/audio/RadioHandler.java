@@ -106,7 +106,7 @@ public class RadioHandler {
 	}
 
 	public static void restart(RadioSoundInstance oldSoundInstance) {
-		Minecraft.getInstance().schedule(() -> {
+		Minecraft.getInstance().tell(() -> {
 			if (oldSoundInstance != lastStation) return;
 			if (oldSoundInstance instanceof StaticRadioSoundInstance staticInstance) {
 				play(oldSoundInstance.url(), RandomSource.create(), BlockPos.containing(staticInstance.source()));
