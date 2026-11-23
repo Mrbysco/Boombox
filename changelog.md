@@ -1,1 +1,1 @@
-* Backport to 1.21.1
+* Restart the stream when unpaused
